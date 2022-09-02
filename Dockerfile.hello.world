@@ -1,0 +1,13 @@
+FROM ubuntu:latest
+
+# Caso o comando run passe um comando, ele irá sobrescrever o comando default
+# para que isso ocorra, é preciso usar um ENTRYPOINT ao invés de CMD
+# Caso seja usado o CMD junto com o Entrypoint, tudo que for passado ao cmd será adicionado como parâmetro ao entrypoint
+CMD ["echo", "Hello World!"]
+
+# Não será sobrescrito por algum comando passado na cli
+# E irá executar antes do CMD mesmo sendo declarado depois
+ENTRYPOINT ["echo", "ENTRYPOINT!"]
+
+# Build: docker build -t md91/hello-world -f Dockerfile.hello.world .
+# Run: docker run --rm md91/hello-world
