@@ -1,0 +1,15 @@
+{
+	"name": "node",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build-dev": "npm install && docker build -t md91/node-express -f Dockerfile.dev . && docker rm node-express -f && docker run -d -p 3000:3000 --name node-express md91/node-express && docker logs node-express"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.18.1"
+	}
+}
