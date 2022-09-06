@@ -25,6 +25,7 @@ COPY --from=builder /var/www/laravel .
 # permissão para o usuário www-data e grupo www-data
 # -R é recursive
 RUN chown -R www-data:www-data /var/www
+RUN ln -s public html
 
 EXPOSE 9000
 
