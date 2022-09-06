@@ -1,6 +1,13 @@
 const express = require("express");
 const server = express();
 
+const config = {
+	host: 'db',
+	user: 'root',
+	password: 'root',
+	database: 'nodedb',
+}
+
 server.use(express.json());
 
 server.get("/", (req, res) => {

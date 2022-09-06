@@ -1,25 +1,38 @@
 version: '3'
 
 services:
-  laravel:
+  app:
     build:
-      context: ./laravel
-      dockerfile: ./laravel/Dockerfile.prod
-    image: md91/laravel:prod
-    container_name: laravel
+      ## especifica o diretorio onde está o DockerFile
+      context: ./node
+    container_name: app
+    ## dockerize é instalado no Dockerfile do node, serve para esperar o db subir para o app rodar
+    ## docker-entrypoint.sh é o arquivo que essa imagem do node executa
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
     networks:
-      - laranet
+      - node-network
+    volumes:
+      - ./node:/usr/src/app
+    tty: true
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - db
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: ./nginx/Dockerfile.prod
-    image: md91/nginx:prod
-    container_name: nginx
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
     networks:
-      - laranet
-    ports:
-      - "8080:80"
+      - node-network
+
 networks:
-  laranet:
+  node-network:
     driver: "bridge"
